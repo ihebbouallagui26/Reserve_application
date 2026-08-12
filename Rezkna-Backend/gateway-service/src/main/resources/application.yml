@@ -4,6 +4,47 @@ server:
 spring:
   application:
     name: gateway-service
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: identity-service
+              uri: http://${IDENTITY_SERVICE_HOST:localhost}:${IDENTITY_SERVICE_PORT:4001}
+              predicates:
+                - Path=/api/identity/**
+              filters:
+                - StripPrefix=2
+            - id: restaurant-service
+              uri: http://${RESTAURANT_SERVICE_HOST:localhost}:${RESTAURANT_SERVICE_PORT:4002}
+              predicates:
+                - Path=/api/restaurant/**
+              filters:
+                - StripPrefix=2
+            - id: reservation-service
+              uri: http://${RESERVATION_SERVICE_HOST:localhost}:${RESERVATION_SERVICE_PORT:4003}
+              predicates:
+                - Path=/api/reservation/**
+              filters:
+                - StripPrefix=2
+            - id: loyalty-service
+              uri: http://${LOYALTY_SERVICE_HOST:localhost}:${LOYALTY_SERVICE_PORT:4004}
+              predicates:
+                - Path=/api/loyalty/**
+              filters:
+                - StripPrefix=2
+            - id: engagement-service
+              uri: http://${ENGAGEMENT_SERVICE_HOST:localhost}:${ENGAGEMENT_SERVICE_PORT:4005}
+              predicates:
+                - Path=/api/engagement/**
+              filters:
+                - StripPrefix=2
+            - id: media-service
+              uri: http://${MEDIA_SERVICE_HOST:localhost}:${MEDIA_SERVICE_PORT:4006}
+              predicates:
+                - Path=/api/media/**
+              filters:
+                - StripPrefix=2
 
 management:
   endpoints:

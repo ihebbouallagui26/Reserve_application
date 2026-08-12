@@ -1,0 +1,15 @@
+server:
+  port: 4002
+
+spring:
+  application:
+    name: restaurant-service
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never

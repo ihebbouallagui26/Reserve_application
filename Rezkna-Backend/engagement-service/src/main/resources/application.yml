@@ -1,0 +1,15 @@
+server:
+  port: 4005
+
+spring:
+  application:
+    name: engagement-service
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never

@@ -1,0 +1,15 @@
+server:
+  port: 4001
+
+spring:
+  application:
+    name: identity-service
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never

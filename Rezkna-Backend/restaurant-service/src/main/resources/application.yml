@@ -4,6 +4,9 @@ server:
 spring:
   application:
     name: restaurant-service
+  data:
+    mongodb:
+      uri: mongodb://${MONGODB_HOST:localhost}:${MONGODB_PORT:27017}/${MONGODB_DATABASE:restaurant-db}
 
 management:
   endpoints:

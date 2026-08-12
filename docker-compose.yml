@@ -1,0 +1,204 @@
+services:
+
+  mongodb:
+    image: mongo:8.2
+    container_name: rezkna-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    networks:
+      - rezkna-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: rezkna-redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - rezkna-network
+
+  identity-service:
+    build:
+      context: ./Rezkna-Backend/identity-service
+    container_name: rezkna-identity-service
+    ports:
+      - "4001:4001"
+    environment:
+      MONGODB_HOST: mongodb
+      MONGODB_PORT: 27017
+      MONGODB_DATABASE: identity-db
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:4001/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+    networks:
+      - rezkna-network
+
+  restaurant-service:
+    build:
+      context: ./Rezkna-Backend/restaurant-service
+    container_name: rezkna-restaurant-service
+    ports:
+      - "4002:4002"
+    environment:
+      MONGODB_HOST: mongodb
+      MONGODB_PORT: 27017
+      MONGODB_DATABASE: restaurant-db
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:4002/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+    networks:
+      - rezkna-network
+
+  reservation-service:
+    build:
+      context: ./Rezkna-Backend/reservation-service
+    container_name: rezkna-reservation-service
+    ports:
+      - "4003:4003"
+    environment:
+      MONGODB_HOST: mongodb
+      MONGODB_PORT: 27017
+      MONGODB_DATABASE: reservation-db
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:4003/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+    networks:
+      - rezkna-network
+
+  loyalty-service:
+    build:
+      context: ./Rezkna-Backend/loyalty-service
+    container_name: rezkna-loyalty-service
+    ports:
+      - "4004:4004"
+    environment:
+      MONGODB_HOST: mongodb
+      MONGODB_PORT: 27017
+      MONGODB_DATABASE: loyalty-db
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:4004/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+    networks:
+      - rezkna-network
+
+  engagement-service:
+    build:
+      context: ./Rezkna-Backend/engagement-service
+    container_name: rezkna-engagement-service
+    ports:
+      - "4005:4005"
+    environment:
+      MONGODB_HOST: mongodb
+      MONGODB_PORT: 27017
+      MONGODB_DATABASE: engagement-db
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:4005/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+    networks:
+      - rezkna-network
+
+  media-service:
+    build:
+      context: ./Rezkna-Backend/media-service
+    container_name: rezkna-media-service
+    ports:
+      - "4006:4006"
+    environment:
+      MONGODB_HOST: mongodb
+      MONGODB_PORT: 27017
+      MONGODB_DATABASE: media-db
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:4006/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+    networks:
+      - rezkna-network
+
+  gateway-service:
+    build:
+      context: ./Rezkna-Backend/gateway-service
+    container_name: rezkna-gateway-service
+    ports:
+      - "4000:4000"
+    environment:
+      IDENTITY_SERVICE_HOST: identity-service
+      IDENTITY_SERVICE_PORT: 4001
+      RESTAURANT_SERVICE_HOST: restaurant-service
+      RESTAURANT_SERVICE_PORT: 4002
+      RESERVATION_SERVICE_HOST: reservation-service
+      RESERVATION_SERVICE_PORT: 4003
+      LOYALTY_SERVICE_HOST: loyalty-service
+      LOYALTY_SERVICE_PORT: 4004
+      ENGAGEMENT_SERVICE_HOST: engagement-service
+      ENGAGEMENT_SERVICE_PORT: 4005
+      MEDIA_SERVICE_HOST: media-service
+      MEDIA_SERVICE_PORT: 4006
+    depends_on:
+      identity-service:
+        condition: service_healthy
+      restaurant-service:
+        condition: service_healthy
+      reservation-service:
+        condition: service_healthy
+      loyalty-service:
+        condition: service_healthy
+      engagement-service:
+        condition: service_healthy
+      media-service:
+        condition: service_healthy
+    networks:
+      - rezkna-network
+
+networks:
+  rezkna-network:
+    driver: bridge
+
+volumes:
+  mongodb-data:

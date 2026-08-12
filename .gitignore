@@ -1,0 +1,49 @@
+# === Java / Maven (Rezkna-Backend services) ===
+target/
+*.class
+*.jar
+!.mvn/wrapper/maven-wrapper.jar
+.mvn/timing.properties
+
+# === Node / React Native (Rezkna-Frontend) ===
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.expo/
+.expo-shared/
+dist/
+web-build/
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# === Environment / secrets ===
+.env
+.env.*
+!.env.example
+*.env
+!*.env.example
+
+# === IDE ===
+.idea/
+*.iml
+.vscode/
+*.swp
+
+# === OS ===
+.DS_Store
+Thumbs.db
+
+# === Docker ===
+docker-compose.override.yml
+
+# === Logs ===
+*.log
+logs/
+
+# === Internal docs with production infra details (not for GitHub) ===
+rezkna-plan-sprints-microservices.pdf
+rezkna-technical-documentation.pdf

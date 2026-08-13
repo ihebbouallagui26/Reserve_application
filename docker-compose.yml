@@ -1,21 +1,5 @@
 services:
 
-  mongodb:
-    image: mongo:8.2
-    container_name: rezkna-mongodb
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongodb-data:/data/db
-    healthcheck:
-      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 20s
-    networks:
-      - rezkna-network
-
   redis:
     image: redis:7-alpine
     container_name: rezkna-redis
@@ -36,12 +20,10 @@ services:
     ports:
       - "4001:4001"
     environment:
-      MONGODB_HOST: mongodb
-      MONGODB_PORT: 27017
+      MONGODB_ATLAS_USER: ${MONGODB_ATLAS_USER}
+      MONGODB_ATLAS_PASSWORD: ${MONGODB_ATLAS_PASSWORD}
+      MONGODB_ATLAS_HOST: ${MONGODB_ATLAS_HOST}
       MONGODB_DATABASE: identity-db
-    depends_on:
-      mongodb:
-        condition: service_healthy
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:4001/actuator/health"]
       interval: 10s
@@ -58,12 +40,10 @@ services:
     ports:
       - "4002:4002"
     environment:
-      MONGODB_HOST: mongodb
-      MONGODB_PORT: 27017
+      MONGODB_ATLAS_USER: ${MONGODB_ATLAS_USER}
+      MONGODB_ATLAS_PASSWORD: ${MONGODB_ATLAS_PASSWORD}
+      MONGODB_ATLAS_HOST: ${MONGODB_ATLAS_HOST}
       MONGODB_DATABASE: restaurant-db
-    depends_on:
-      mongodb:
-        condition: service_healthy
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:4002/actuator/health"]
       interval: 10s
@@ -80,12 +60,10 @@ services:
     ports:
       - "4003:4003"
     environment:
-      MONGODB_HOST: mongodb
-      MONGODB_PORT: 27017
+      MONGODB_ATLAS_USER: ${MONGODB_ATLAS_USER}
+      MONGODB_ATLAS_PASSWORD: ${MONGODB_ATLAS_PASSWORD}
+      MONGODB_ATLAS_HOST: ${MONGODB_ATLAS_HOST}
       MONGODB_DATABASE: reservation-db
-    depends_on:
-      mongodb:
-        condition: service_healthy
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:4003/actuator/health"]
       interval: 10s
@@ -102,12 +80,10 @@ services:
     ports:
       - "4004:4004"
     environment:
-      MONGODB_HOST: mongodb
-      MONGODB_PORT: 27017
+      MONGODB_ATLAS_USER: ${MONGODB_ATLAS_USER}
+      MONGODB_ATLAS_PASSWORD: ${MONGODB_ATLAS_PASSWORD}
+      MONGODB_ATLAS_HOST: ${MONGODB_ATLAS_HOST}
       MONGODB_DATABASE: loyalty-db
-    depends_on:
-      mongodb:
-        condition: service_healthy
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:4004/actuator/health"]
       interval: 10s
@@ -124,12 +100,10 @@ services:
     ports:
       - "4005:4005"
     environment:
-      MONGODB_HOST: mongodb
-      MONGODB_PORT: 27017
+      MONGODB_ATLAS_USER: ${MONGODB_ATLAS_USER}
+      MONGODB_ATLAS_PASSWORD: ${MONGODB_ATLAS_PASSWORD}
+      MONGODB_ATLAS_HOST: ${MONGODB_ATLAS_HOST}
       MONGODB_DATABASE: engagement-db
-    depends_on:
-      mongodb:
-        condition: service_healthy
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:4005/actuator/health"]
       interval: 10s
@@ -146,12 +120,10 @@ services:
     ports:
       - "4006:4006"
     environment:
-      MONGODB_HOST: mongodb
-      MONGODB_PORT: 27017
+      MONGODB_ATLAS_USER: ${MONGODB_ATLAS_USER}
+      MONGODB_ATLAS_PASSWORD: ${MONGODB_ATLAS_PASSWORD}
+      MONGODB_ATLAS_HOST: ${MONGODB_ATLAS_HOST}
       MONGODB_DATABASE: media-db
-    depends_on:
-      mongodb:
-        condition: service_healthy
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:4006/actuator/health"]
       interval: 10s
@@ -199,6 +171,3 @@ services:
 networks:
   rezkna-network:
     driver: bridge
-
-volumes:
-  mongodb-data:

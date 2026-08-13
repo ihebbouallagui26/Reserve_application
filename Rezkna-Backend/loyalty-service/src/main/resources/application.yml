@@ -6,7 +6,7 @@ spring:
     name: loyalty-service
   data:
     mongodb:
-      uri: mongodb://${MONGODB_HOST:localhost}:${MONGODB_PORT:27017}/${MONGODB_DATABASE:loyalty-db}
+      uri: mongodb+srv://${MONGODB_ATLAS_USER}:${MONGODB_ATLAS_PASSWORD}@${MONGODB_ATLAS_HOST}/${MONGODB_DATABASE:loyalty-db}?retryWrites=true&w=majority&appName=Cluster0
 
 management:
   endpoints:

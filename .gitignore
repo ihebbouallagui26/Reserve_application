@@ -44,6 +44,9 @@ docker-compose.override.yml
 *.log
 logs/
 
+# === Accidentally-downloaded credential exports (e.g. MongoDB Atlas "create user" download) ===
+*_db_user.txt
+
 # === Internal docs with production infra details (not for GitHub) ===
 rezkna-plan-sprints-microservices.pdf
 rezkna-technical-documentation.pdf

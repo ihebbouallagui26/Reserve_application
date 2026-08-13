@@ -15,7 +15,8 @@ services:
 
   identity-service:
     build:
-      context: ./Rezkna-Backend/identity-service
+      context: ./Rezkna-Backend
+      dockerfile: identity-service/Dockerfile
     container_name: rezkna-identity-service
     ports:
       - "4001:4001"
@@ -35,7 +36,8 @@ services:
 
   restaurant-service:
     build:
-      context: ./Rezkna-Backend/restaurant-service
+      context: ./Rezkna-Backend
+      dockerfile: restaurant-service/Dockerfile
     container_name: rezkna-restaurant-service
     ports:
       - "4002:4002"
@@ -55,7 +57,8 @@ services:
 
   reservation-service:
     build:
-      context: ./Rezkna-Backend/reservation-service
+      context: ./Rezkna-Backend
+      dockerfile: reservation-service/Dockerfile
     container_name: rezkna-reservation-service
     ports:
       - "4003:4003"
@@ -75,7 +78,8 @@ services:
 
   loyalty-service:
     build:
-      context: ./Rezkna-Backend/loyalty-service
+      context: ./Rezkna-Backend
+      dockerfile: loyalty-service/Dockerfile
     container_name: rezkna-loyalty-service
     ports:
       - "4004:4004"
@@ -95,7 +99,8 @@ services:
 
   engagement-service:
     build:
-      context: ./Rezkna-Backend/engagement-service
+      context: ./Rezkna-Backend
+      dockerfile: engagement-service/Dockerfile
     container_name: rezkna-engagement-service
     ports:
       - "4005:4005"
@@ -115,7 +120,8 @@ services:
 
   media-service:
     build:
-      context: ./Rezkna-Backend/media-service
+      context: ./Rezkna-Backend
+      dockerfile: media-service/Dockerfile
     container_name: rezkna-media-service
     ports:
       - "4006:4006"

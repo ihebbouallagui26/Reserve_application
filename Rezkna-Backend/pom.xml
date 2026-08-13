@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.rezkna</groupId>
+    <artifactId>rezkna-backend</artifactId>
+    <version>0.1.0</version>
+    <packaging>pom</packaging>
+    <name>rezkna-backend</name>
+    <description>Reactor aggregator only - NOT a parent POM. Each service keeps its own
+        independent spring-boot-starter-parent so services remain deployable/versionable
+        independently. This module exists purely so `mvn install` from this directory
+        builds common-lib before the services that depend on it.</description>
+
+    <modules>
+        <module>common-lib</module>
+        <module>gateway-service</module>
+        <module>identity-service</module>
+        <module>restaurant-service</module>
+        <module>reservation-service</module>
+        <module>loyalty-service</module>
+        <module>engagement-service</module>
+        <module>media-service</module>
+    </modules>
+
+</project>

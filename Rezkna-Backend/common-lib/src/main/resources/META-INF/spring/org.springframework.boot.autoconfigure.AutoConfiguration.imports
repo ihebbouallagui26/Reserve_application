@@ -1,1 +1,2 @@
 com.rezkna.common.config.CommonLibAutoConfiguration
+com.rezkna.common.config.JwtAutoConfiguration

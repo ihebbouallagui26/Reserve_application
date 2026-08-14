@@ -8,6 +8,9 @@ spring:
     mongodb:
       uri: mongodb+srv://${MONGODB_ATLAS_USER}:${MONGODB_ATLAS_PASSWORD}@${MONGODB_ATLAS_HOST}/${MONGODB_DATABASE:loyalty-db}?retryWrites=true&w=majority&appName=Cluster0
 
+jwt:
+  secret: ${JWT_SECRET}
+
 management:
   endpoints:
     web:

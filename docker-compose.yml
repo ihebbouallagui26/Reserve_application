@@ -25,6 +25,7 @@ services:
       MONGODB_ATLAS_PASSWORD: ${MONGODB_ATLAS_PASSWORD}
       MONGODB_ATLAS_HOST: ${MONGODB_ATLAS_HOST}
       MONGODB_DATABASE: identity-db
+      JWT_SECRET: ${JWT_SECRET}
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:4001/actuator/health"]
       interval: 10s
@@ -46,6 +47,7 @@ services:
       MONGODB_ATLAS_PASSWORD: ${MONGODB_ATLAS_PASSWORD}
       MONGODB_ATLAS_HOST: ${MONGODB_ATLAS_HOST}
       MONGODB_DATABASE: restaurant-db
+      JWT_SECRET: ${JWT_SECRET}
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:4002/actuator/health"]
       interval: 10s
@@ -67,6 +69,7 @@ services:
       MONGODB_ATLAS_PASSWORD: ${MONGODB_ATLAS_PASSWORD}
       MONGODB_ATLAS_HOST: ${MONGODB_ATLAS_HOST}
       MONGODB_DATABASE: reservation-db
+      JWT_SECRET: ${JWT_SECRET}
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:4003/actuator/health"]
       interval: 10s
@@ -88,6 +91,7 @@ services:
       MONGODB_ATLAS_PASSWORD: ${MONGODB_ATLAS_PASSWORD}
       MONGODB_ATLAS_HOST: ${MONGODB_ATLAS_HOST}
       MONGODB_DATABASE: loyalty-db
+      JWT_SECRET: ${JWT_SECRET}
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:4004/actuator/health"]
       interval: 10s
@@ -109,6 +113,7 @@ services:
       MONGODB_ATLAS_PASSWORD: ${MONGODB_ATLAS_PASSWORD}
       MONGODB_ATLAS_HOST: ${MONGODB_ATLAS_HOST}
       MONGODB_DATABASE: engagement-db
+      JWT_SECRET: ${JWT_SECRET}
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:4005/actuator/health"]
       interval: 10s
@@ -130,6 +135,7 @@ services:
       MONGODB_ATLAS_PASSWORD: ${MONGODB_ATLAS_PASSWORD}
       MONGODB_ATLAS_HOST: ${MONGODB_ATLAS_HOST}
       MONGODB_DATABASE: media-db
+      JWT_SECRET: ${JWT_SECRET}
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:4006/actuator/health"]
       interval: 10s

@@ -1,0 +1,19 @@
+spring:
+  data:
+    mongodb:
+      auto-index-creation: true
+
+jwt:
+  secret: test-secret-at-least-32-bytes-long-for-hs256-tests!!
+
+identity:
+  jwt:
+    diner-token-days: 60
+    partner-token-days: 14
+
+google:
+  client-id: test-google-client-id
+
+facebook:
+  app-id: test-facebook-app-id
+  app-secret: test-facebook-app-secret

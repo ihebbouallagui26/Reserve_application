@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class LoggingSmsSenderTest {
 
-    private final LoggingSmsSender smsSender = new LoggingSmsSender();
+    private final LoggingSmsSender smsSender = new LoggingSmsSender(false);
     private ListAppender<ILoggingEvent> appender;
     private Logger logger;
 
@@ -52,5 +52,17 @@ class LoggingSmsSenderTest {
 
         String logged = appender.list.stream().map(ILoggingEvent::getFormattedMessage).findFirst().orElse("");
         assertThat(logged).contains("****");
+    }
+
+    @Test
+    void logsTheOtpWhenExplicitlyEnabledForDev() {
+        LoggingSmsSender devSmsSender = new LoggingSmsSender(true);
+
+        devSmsSender.send("21612345678", "Your Rezkna verification code is 042381. It expires in 10 minutes.");
+
+        String logged = appender.list.stream().map(ILoggingEvent::getFormattedMessage).findFirst().orElse("");
+        assertThat(logged).contains("042381");
+        assertThat(logged).contains("*******5678");
+        assertThat(logged).doesNotContain("21612345678");
     }
 }

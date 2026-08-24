@@ -16,6 +16,8 @@ identity:
   jwt:
     diner-token-days: ${DINER_TOKEN_DAYS:60}
     partner-token-days: ${PARTNER_TOKEN_DAYS:14}
+  sms:
+    log-otp-for-dev: ${LOG_OTP_FOR_DEV:false}
 
 google:
   client-id: ${GOOGLE_CLIENT_ID:}

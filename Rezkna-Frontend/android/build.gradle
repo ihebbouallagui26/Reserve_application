@@ -19,3 +19,20 @@ buildscript {
 }
 
 apply plugin: "com.facebook.react.rootproject"
+
+// Diagnostic fix (Sprint 1 integration test, applies to every subproject, not just :app):
+// on this NDK 27.1.12297006 / CMake 3.22.1 / Windows toolchain, ANDROID_STL=c++_shared
+// does not result in libc++_shared.so actually being added to native shared-library link
+// commands (confirmed for both the app's own New Architecture codegen libraries and
+// react-native-screens' independently-configured librnscreens.so). Each Android library
+// module configures its own externalNativeBuild separately, so the fix must be applied
+// project-wide rather than only in app/build.gradle.
+subprojects { subproject ->
+    subproject.pluginManager.withPlugin("com.android.library") {
+        subproject.android.defaultConfig.externalNativeBuild {
+            cmake {
+                arguments "-DCMAKE_SHARED_LINKER_FLAGS=-lc++_shared"
+            }
+        }
+    }
+}

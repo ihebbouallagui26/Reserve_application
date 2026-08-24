@@ -84,6 +84,18 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        // Diagnostic fix (Sprint 1 integration test): the New Architecture codegen
+        // shared libraries (react_codegen_rnscreens, react_codegen_safeareacontext)
+        // fail to link on this toolchain - libc++_shared.so is missing from their
+        // link line even though ANDROID_STL=c++_shared is set, because clang.exe
+        // (used as the CMake CXX linker driver here) does not add it implicitly.
+        // Forcing it explicitly resolves the undefined __cxa_*/basic_string/vtable
+        // symbols without disabling New Architecture or touching node_modules.
+        externalNativeBuild {
+            cmake {
+                arguments "-DCMAKE_SHARED_LINKER_FLAGS=-lc++_shared"
+            }
+        }
     }
     signingConfigs {
         debug {

@@ -1,0 +1,2 @@
+jwt:
+  secret: test-secret-at-least-32-bytes-long-for-hs256-tests!!

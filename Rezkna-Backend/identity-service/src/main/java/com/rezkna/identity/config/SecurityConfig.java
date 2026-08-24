@@ -41,7 +41,8 @@ public class SecurityConfig {
                                 "/social",
                                 "/phone/start",
                                 "/phone/verify",
-                                "/partner/login"
+                                "/partner/login",
+                                "/platform/login"
                         ).permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(exception -> exception

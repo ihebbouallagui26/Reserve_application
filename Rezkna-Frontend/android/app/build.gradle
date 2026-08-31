@@ -96,6 +96,14 @@ android {
                 arguments "-DCMAKE_SHARED_LINKER_FLAGS=-lc++_shared"
             }
         }
+        // react-native-maps (Phase 11 Checkpoint 8): Android always needs a
+        // Google Maps API key, provisioned via env var, never hardcoded here.
+        // An empty value lets the build succeed without one; the map itself
+        // simply won't authenticate/render until a real key is supplied -
+        // see MAPS_API_KEY in the deployment docs.
+        manifestPlaceholders = [
+            MAPS_API_KEY: System.getenv("MAPS_API_KEY") ?: ""
+        ]
     }
     signingConfigs {
         debug {

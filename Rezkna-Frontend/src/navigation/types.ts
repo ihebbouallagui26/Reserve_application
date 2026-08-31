@@ -1,13 +1,11 @@
 /**
- * Root-level navigation. Each branch is session-gated (see RootNavigator) -
- * a diner session can only ever reach "Diner", a partner session only
- * "Partner", and no session only "Auth". Nested param lists for the real
- * screens inside each branch are added as those screens are built
- * (Phase 2: AuthStackParamList, Phase 3: DinerStackParamList, Phase 4-5:
- * PartnerStackParamList).
+ * Root-level navigation. Session-gated (see RootNavigator): a partner
+ * session reaches "Partner" only; a diner session and no session at all
+ * both reach "Main" (MainNavigator), since Explore must be reachable
+ * without authentication - AccountEntryScreen, nested inside MainNavigator,
+ * is what actually distinguishes guest from diner (see its own doc comment).
  */
 export type RootStackParamList = {
-  Auth: undefined;
-  Diner: undefined;
+  Main: undefined;
   Partner: undefined;
 };

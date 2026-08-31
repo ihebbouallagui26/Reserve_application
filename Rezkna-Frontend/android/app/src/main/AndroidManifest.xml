@@ -1,6 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Phase 11 Checkpoint 9: one-shot position lookup for "restaurants near
+         me" (locationService.getCurrentPosition) - requested at runtime via
+         PermissionsAndroid, never assumed granted. No background/coarse
+         tracking, so ACCESS_COARSE_LOCATION and ACCESS_BACKGROUND_LOCATION
+         are deliberately not requested. -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
       android:name=".MainApplication"
@@ -11,6 +17,12 @@
       android:theme="@style/AppTheme"
       android:usesCleartextTraffic="${usesCleartextTraffic}"
       android:supportsRtl="true">
+      <!-- react-native-maps (Phase 11 Checkpoint 8): required by Android for
+           any map rendering, regardless of the "my location" feature. Value
+           comes from MAPS_API_KEY (see build.gradle) - never hardcoded. -->
+      <meta-data
+        android:name="com.google.android.geo.API_KEY"
+        android:value="${MAPS_API_KEY}" />
       <activity
         android:name=".MainActivity"
         android:label="@string/app_name"

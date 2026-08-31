@@ -1,6 +1,7 @@
 import {apiRequest} from './client';
 import {getDinerToken} from '../../storage/session';
 import type {ApiError} from '../../models/errors';
+import type {PublicConfigResponse} from '../../models/config';
 import type {
   AuthResponse,
   DinerAccount,
@@ -75,4 +76,7 @@ export const identityApi = {
       body: payload,
       token: await requireDinerToken(),
     }),
+
+  /** Public - no token. Social sign-in client IDs, needed before anyone signs in. */
+  getPublicConfig: () => apiRequest<PublicConfigResponse>('/api/identity/config'),
 };

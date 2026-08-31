@@ -84,7 +84,7 @@ class RestaurantControllerTest {
             return r;
         });
 
-        RestaurantCreateRequest request = new RestaurantCreateRequest("Le Rezkna", "1 Avenue Habib Bourguiba", "Tunis");
+        RestaurantCreateRequest request = new RestaurantCreateRequest("Le Rezkna", "1 Avenue Habib Bourguiba", "Tunis", null, null);
 
         mockMvc.perform(post("/restaurants")
                         .header("Authorization", "Bearer " + anyValidlySignedToken())
@@ -97,7 +97,7 @@ class RestaurantControllerTest {
 
     @Test
     void createReturns401WithoutToken() throws Exception {
-        RestaurantCreateRequest request = new RestaurantCreateRequest("Le Rezkna", "1 Avenue Habib Bourguiba", "Tunis");
+        RestaurantCreateRequest request = new RestaurantCreateRequest("Le Rezkna", "1 Avenue Habib Bourguiba", "Tunis", null, null);
 
         mockMvc.perform(post("/restaurants")
                         .contentType("application/json")
@@ -109,7 +109,7 @@ class RestaurantControllerTest {
     void createReturns401ForDinerToken() throws Exception {
         when(platformTokenVerifier.requireClaims(anyString())).thenThrow(new BadCredentialsException("Wrong token type"));
 
-        RestaurantCreateRequest request = new RestaurantCreateRequest("Le Rezkna", "1 Avenue Habib Bourguiba", "Tunis");
+        RestaurantCreateRequest request = new RestaurantCreateRequest("Le Rezkna", "1 Avenue Habib Bourguiba", "Tunis", null, null);
 
         mockMvc.perform(post("/restaurants")
                         .header("Authorization", "Bearer " + anyValidlySignedToken())
@@ -122,7 +122,7 @@ class RestaurantControllerTest {
     void createReturns401ForPartnerToken() throws Exception {
         when(platformTokenVerifier.requireClaims(anyString())).thenThrow(new BadCredentialsException("Wrong token type"));
 
-        RestaurantCreateRequest request = new RestaurantCreateRequest("Le Rezkna", "1 Avenue Habib Bourguiba", "Tunis");
+        RestaurantCreateRequest request = new RestaurantCreateRequest("Le Rezkna", "1 Avenue Habib Bourguiba", "Tunis", null, null);
 
         mockMvc.perform(post("/restaurants")
                         .header("Authorization", "Bearer " + anyValidlySignedToken())
@@ -135,7 +135,7 @@ class RestaurantControllerTest {
     void createReturns401ForInvalidToken() throws Exception {
         when(platformTokenVerifier.requireClaims(anyString())).thenThrow(new BadCredentialsException("Invalid or expired token"));
 
-        RestaurantCreateRequest request = new RestaurantCreateRequest("Le Rezkna", "1 Avenue Habib Bourguiba", "Tunis");
+        RestaurantCreateRequest request = new RestaurantCreateRequest("Le Rezkna", "1 Avenue Habib Bourguiba", "Tunis", null, null);
 
         mockMvc.perform(post("/restaurants")
                         .header("Authorization", "Bearer not-a-real-token")
@@ -148,7 +148,7 @@ class RestaurantControllerTest {
     void createReturns400ForInvalidValidation() throws Exception {
         mockPlatformOwner();
 
-        RestaurantCreateRequest request = new RestaurantCreateRequest("", "", "");
+        RestaurantCreateRequest request = new RestaurantCreateRequest("", "", "", null, null);
 
         mockMvc.perform(post("/restaurants")
                         .header("Authorization", "Bearer " + anyValidlySignedToken())
@@ -166,7 +166,7 @@ class RestaurantControllerTest {
             return r;
         });
 
-        RestaurantCreateRequest request = new RestaurantCreateRequest("Le Rezkna", "1 Avenue Habib Bourguiba", "Tunis");
+        RestaurantCreateRequest request = new RestaurantCreateRequest("Le Rezkna", "1 Avenue Habib Bourguiba", "Tunis", null, null);
 
         mockMvc.perform(post("/restaurants")
                         .header("Authorization", "Bearer " + anyValidlySignedToken())
@@ -185,7 +185,7 @@ class RestaurantControllerTest {
             return r;
         });
 
-        RestaurantCreateRequest request = new RestaurantCreateRequest("Le Rezkna", "1 Avenue Habib Bourguiba", "Tunis");
+        RestaurantCreateRequest request = new RestaurantCreateRequest("Le Rezkna", "1 Avenue Habib Bourguiba", "Tunis", null, null);
 
         mockMvc.perform(post("/restaurants")
                         .header("Authorization", "Bearer " + anyValidlySignedToken())
@@ -251,7 +251,7 @@ class RestaurantControllerTest {
         when(restaurantRepository.findById("r1")).thenReturn(Optional.of(sampleRestaurant()));
         when(restaurantRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
 
-        RestaurantUpdateRequest request = new RestaurantUpdateRequest("New Name", "New Address", "New City");
+        RestaurantUpdateRequest request = new RestaurantUpdateRequest("New Name", "New Address", "New City", null, null);
 
         mockMvc.perform(put("/restaurants/r1")
                         .header("Authorization", "Bearer " + anyValidlySignedToken())
@@ -269,7 +269,7 @@ class RestaurantControllerTest {
         when(restaurantRepository.findById("r1")).thenReturn(Optional.of(sampleRestaurant()));
         when(restaurantRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
 
-        RestaurantUpdateRequest request = new RestaurantUpdateRequest("New Name", "New Address", "New City");
+        RestaurantUpdateRequest request = new RestaurantUpdateRequest("New Name", "New Address", "New City", null, null);
 
         mockMvc.perform(put("/restaurants/r1")
                         .header("Authorization", "Bearer " + anyValidlySignedToken())
@@ -286,7 +286,7 @@ class RestaurantControllerTest {
         when(restaurantRepository.findById("r1")).thenReturn(Optional.of(existing));
         when(restaurantRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
 
-        RestaurantUpdateRequest request = new RestaurantUpdateRequest("New Name", "New Address", "New City");
+        RestaurantUpdateRequest request = new RestaurantUpdateRequest("New Name", "New Address", "New City", null, null);
 
         mockMvc.perform(put("/restaurants/r1")
                         .header("Authorization", "Bearer " + anyValidlySignedToken())
@@ -378,5 +378,103 @@ class RestaurantControllerTest {
 
         mockMvc.perform(get("/restaurants").header("Authorization", "Bearer " + anyValidlySignedToken()))
                 .andExpect(status().isForbidden());
+    }
+
+    // --- Coordinates (create/update) ---
+
+    @Test
+    void createSetsLocationWhenLatAndLngProvided() throws Exception {
+        mockPlatformOwner();
+        when(restaurantRepository.save(any())).thenAnswer(invocation -> {
+            Restaurant r = invocation.getArgument(0);
+            r.setId("r1");
+            return r;
+        });
+
+        RestaurantCreateRequest request =
+                new RestaurantCreateRequest("Le Rezkna", "1 Avenue Habib Bourguiba", "Tunis", 36.8065, 10.1815);
+
+        mockMvc.perform(post("/restaurants")
+                        .header("Authorization", "Bearer " + anyValidlySignedToken())
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk());
+
+        org.mockito.ArgumentCaptor<Restaurant> captor = org.mockito.ArgumentCaptor.forClass(Restaurant.class);
+        org.mockito.Mockito.verify(restaurantRepository).save(captor.capture());
+        org.assertj.core.api.Assertions.assertThat(captor.getValue().getLocation()).isNotNull();
+        org.assertj.core.api.Assertions.assertThat(captor.getValue().getLocation().getY()).isEqualTo(36.8065);
+        org.assertj.core.api.Assertions.assertThat(captor.getValue().getLocation().getX()).isEqualTo(10.1815);
+    }
+
+    @Test
+    void createLeavesLocationNullWhenLatAndLngOmitted() throws Exception {
+        mockPlatformOwner();
+        when(restaurantRepository.save(any())).thenAnswer(invocation -> {
+            Restaurant r = invocation.getArgument(0);
+            r.setId("r1");
+            return r;
+        });
+
+        RestaurantCreateRequest request =
+                new RestaurantCreateRequest("Le Rezkna", "1 Avenue Habib Bourguiba", "Tunis", null, null);
+
+        mockMvc.perform(post("/restaurants")
+                        .header("Authorization", "Bearer " + anyValidlySignedToken())
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk());
+
+        org.mockito.ArgumentCaptor<Restaurant> captor = org.mockito.ArgumentCaptor.forClass(Restaurant.class);
+        org.mockito.Mockito.verify(restaurantRepository).save(captor.capture());
+        org.assertj.core.api.Assertions.assertThat(captor.getValue().getLocation()).isNull();
+    }
+
+    @Test
+    void createReturns400WhenOnlyLatProvided() throws Exception {
+        mockPlatformOwner();
+
+        RestaurantCreateRequest request =
+                new RestaurantCreateRequest("Le Rezkna", "1 Avenue Habib Bourguiba", "Tunis", 36.8065, null);
+
+        mockMvc.perform(post("/restaurants")
+                        .header("Authorization", "Bearer " + anyValidlySignedToken())
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void createReturns400ForOutOfRangeLatitude() throws Exception {
+        mockPlatformOwner();
+
+        RestaurantCreateRequest request =
+                new RestaurantCreateRequest("Le Rezkna", "1 Avenue Habib Bourguiba", "Tunis", 95.0, 10.1815);
+
+        mockMvc.perform(post("/restaurants")
+                        .header("Authorization", "Bearer " + anyValidlySignedToken())
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void updateSetsLocationWhenLatAndLngProvided() throws Exception {
+        mockPlatformOwner();
+        when(restaurantRepository.findById("r1")).thenReturn(Optional.of(sampleRestaurant()));
+        when(restaurantRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
+
+        RestaurantUpdateRequest request =
+                new RestaurantUpdateRequest("New Name", "New Address", "New City", 36.8065, 10.1815);
+
+        mockMvc.perform(put("/restaurants/r1")
+                        .header("Authorization", "Bearer " + anyValidlySignedToken())
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk());
+
+        org.mockito.ArgumentCaptor<Restaurant> captor = org.mockito.ArgumentCaptor.forClass(Restaurant.class);
+        org.mockito.Mockito.verify(restaurantRepository).save(captor.capture());
+        org.assertj.core.api.Assertions.assertThat(captor.getValue().getLocation()).isNotNull();
     }
 }

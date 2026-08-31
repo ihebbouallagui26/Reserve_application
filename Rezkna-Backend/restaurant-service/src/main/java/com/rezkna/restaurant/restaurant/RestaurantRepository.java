@@ -2,5 +2,9 @@ package com.rezkna.restaurant.restaurant;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface RestaurantRepository extends MongoRepository<Restaurant, String> {
+import java.util.List;
+
+public interface RestaurantRepository extends MongoRepository<Restaurant, String>, RestaurantRepositoryCustom {
+
+    List<Restaurant> findByStatus(RestaurantStatus status);
 }

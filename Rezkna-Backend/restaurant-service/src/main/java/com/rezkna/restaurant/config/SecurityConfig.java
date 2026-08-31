@@ -27,7 +27,14 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/actuator/health", "/ping", "/ping/not-found", "/ping/validate").permitAll()
+                        .requestMatchers(
+                                "/actuator/health",
+                                "/ping",
+                                "/ping/not-found",
+                                "/ping/validate",
+                                "/restaurants/public",
+                                "/restaurants/public/**"
+                        ).permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint)

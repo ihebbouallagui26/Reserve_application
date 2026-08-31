@@ -4,6 +4,7 @@ import com.rezkna.common.exception.BadRequestException;
 import com.rezkna.common.exception.ResourceNotFoundException;
 import com.rezkna.common.response.ApiResponse;
 import jakarta.validation.Valid;
+import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +35,7 @@ public class RestaurantController {
         restaurant.setAddress(request.address());
         restaurant.setCity(request.city());
         restaurant.setStatus(RestaurantStatus.PENDING);
+        restaurant.setLocation(resolveLocation(request.lat(), request.lng()));
         Instant now = Instant.now();
         restaurant.setCreatedAt(now);
         restaurant.setUpdatedAt(now);
@@ -69,6 +71,7 @@ public class RestaurantController {
         restaurant.setName(request.name());
         restaurant.setAddress(request.address());
         restaurant.setCity(request.city());
+        restaurant.setLocation(resolveLocation(request.lat(), request.lng()));
         restaurant.setUpdatedAt(Instant.now());
 
         Restaurant saved = restaurantRepository.save(restaurant);
@@ -92,6 +95,25 @@ public class RestaurantController {
     private Restaurant requireRestaurant(String id) {
         return restaurantRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Restaurant not found"));
+    }
+
+    /** Coordinates are optional (a restaurant can exist without them, per Phase 8's rule
+     * that such restaurants simply never surface in a geo search) but must be provided
+     * together and within valid ranges when given at all. */
+    private GeoJsonPoint resolveLocation(Double lat, Double lng) {
+        if (lat == null && lng == null) {
+            return null;
+        }
+        if (lat == null || lng == null) {
+            throw new BadRequestException("lat and lng must both be provided together");
+        }
+        if (lat < -90 || lat > 90) {
+            throw new BadRequestException("lat must be between -90 and 90");
+        }
+        if (lng < -180 || lng > 180) {
+            throw new BadRequestException("lng must be between -180 and 180");
+        }
+        return new GeoJsonPoint(lng, lat);
     }
 
     private RestaurantStatus parseStatus(String value) {

@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 public record RestaurantUpdateRequest(
         @NotBlank String name,
         @NotBlank String address,
-        @NotBlank String city
+        @NotBlank String city,
+        Double lat,
+        Double lng
 ) {
 }
